@@ -23,8 +23,8 @@ generate_chrome:
 	cd ./chrome && ./generate.sh chrome $(VERSION) $(ORG_NAME) $(NAMESPACE) $(AUTHORS)
 
 tag_latest:
-	docker tag $(ORG_NAME)/$(NAMESPACE)-base:$(VERSION) $(NAME)/base:latest
-	docker tag $(ORG_NAME)/$(NAMESPACE)-chrome:$(VERSION) $(NAME)/base:latest
+	docker tag $(ORG_NAME)/$(NAMESPACE)-base:$(VERSION) $(ORG_NAME)/$(NAMESPACE)-base:latest
+	docker tag $(ORG_NAME)/$(NAMESPACE)-chrome:$(VERSION) $(ORG_NAME)/$(NAMESPACE)-chrome:latest
 
 release_latest:
 	docker push $(ORG_NAME)/$(NAMESPACE)-base:latest
