@@ -31,7 +31,7 @@ generate_chrome_debug:
 tag_latest:
 	docker tag $(ORG_NAME)/$(NAMESPACE)-base:$(VERSION) $(ORG_NAME)/$(NAMESPACE)-base:latest
 	docker tag $(ORG_NAME)/$(NAMESPACE)-chrome:$(VERSION) $(ORG_NAME)/$(NAMESPACE)-chrome:latest
-	docker tag $(ORG_NAME)/$(NAMESPACE)-chrome-debug:$(VERSION) $(ORG_NAME)/$(NAMESPACE)-chrome:latest
+	docker tag $(ORG_NAME)/$(NAMESPACE)-chrome-debug:$(VERSION) $(ORG_NAME)/$(NAMESPACE)-chrome-debug:latest
 
 release_latest:
 	docker push $(ORG_NAME)/$(NAMESPACE)-base:latest
@@ -46,7 +46,7 @@ tag_major_minor:
 	docker tag $(ORG_NAME)/$(NAMESPACE)-base:$(VERSION) $(ORG_NAME)/$(NAMESPACE)-chrome:$(MAJOR).$(MINOR)
 	docker tag $(ORG_NAME)/$(NAMESPACE)-base:$(VERSION) $(ORG_NAME)/$(NAMESPACE)-chrome:$(MAJOR_MINOR_PATCH)
 
-release: tag_major_minor
+release: tag_major_minor release_latest
 	@if ! docker images $(ORG_NAME)/$(NAMESPACE)-base | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(ORG_NAME)/$(NAMESPACE)-base version $(VERSION) is not yet built. Please run 'make build'"; false; fi
 	@if ! docker images $(ORG_NAME)/$(NAMESPACE)-chrome | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(ORG_NAME)/$(NAMESPACE)-base version $(VERSION) is not yet built. Please run 'make build'"; false; fi
 	@if ! docker images $(ORG_NAME)/$(NAMESPACE)-chrome-debug | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(ORG_NAME)/$(NAMESPACE)-base version $(VERSION) is not yet built. Please run 'make build'"; false; fi

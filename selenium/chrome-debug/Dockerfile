@@ -49,4 +49,4 @@ ENV DISPLAY :99.0
 
 EXPOSE 5900
 
-CMD ["/opt/bin/entry_point.sh"]
+ENTRYPOINT ["/opt/bin/entry_point.sh"]
