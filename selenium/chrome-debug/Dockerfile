@@ -1,0 +1,71 @@
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# NOTE: DO *NOT* EDIT THIS FILE.  IT IS GENERATED.
+# PLEASE UPDATE Dockerfile.txt INSTEAD OF THIS FILE
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+FROM openstax/selenium-chrome:1.0.0
+LABEL authors=OpenStaxQA
+
+#==========
+# Selenium
+#==========
+RUN  sudo mkdir -p /opt/selenium \
+  && sudo chown seluser:seluser /opt/selenium \
+  && wget --no-verbose https://selenium-release.storage.googleapis.com/3.13/selenium-server-standalone-3.13.0.jar \
+    -O /opt/selenium/selenium-server-standalone.jar
+
+#==============================
+# Scripts to run Selenium
+#==============================
+COPY entry_point.sh \
+  functions.sh \
+    /opt/bin/
+
+USER root
+
+#==============
+# Xvfb
+#==============
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    xvfb \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+#=====
+# VNC
+#=====
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+  x11vnc \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+#=========
+# fluxbox
+# A fast, lightweight and responsive window manager
+#=========
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    fluxbox \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+#============================
+# Some configuration options
+#============================
+ENV SCREEN_WIDTH 1360
+ENV SCREEN_HEIGHT 1020
+ENV SCREEN_DEPTH 24
+ENV DISPLAY :99.0
+
+#==============================
+# Generating the VNC password as seluser
+# So the service can be started with seluser
+#==============================
+
+USER seluser
+
+RUN mkdir -p ~/.vnc \
+  && x11vnc -storepasswd secret ~/.vnc/passwd \
+  && chown seluser:seluser ~/.vnc
+
+EXPOSE 5900
+
+ENTRYPOINT ["/opt/bin/entry_point.sh"]
