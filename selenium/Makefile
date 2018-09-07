@@ -19,7 +19,7 @@ base:
 chrome: base generate_chrome
 	cd ./chrome && docker build $(BUILD_ARGS) -t $(ORG_NAME)/$(NAMESPACE)-chrome:$(VERSION) .
 
-chrome-debug: base generate_chrome generate_chrome_debug
+chrome-debug: chrome generate_chrome_debug
 	cd ./chrome-debug && docker build $(BUILD_ARGS) -t $(ORG_NAME)/$(NAMESPACE)-chrome-debug:$(VERSION) .
 
 generate_chrome:
