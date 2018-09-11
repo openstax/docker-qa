@@ -40,4 +40,9 @@ fluxbox -display $DISPLAY &
 
 x11vnc $X11VNC_OPTS -forever -shared -rfbport 5900 -display $DISPLAY &
 NODE_PID=$!
-wait $NODE_PID
+
+if [ -z "$@" ]; then
+  wait $NODE_PID
+else
+  exec "$@"
+fi
