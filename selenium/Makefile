@@ -1,6 +1,6 @@
 # File is based on Makefile in SeleniumHQ/selenium-docker GitHub repo
 ORG_NAME := openstax
-VERSION := $(or $(VERSION),$(VERSION),1.0.0)
+VERSION := $(or $(VERSION),$(VERSION),1.1.0)
 NAMESPACE := $(or $(NAMESPACE),$(NAMESPACE),selenium)
 AUTHORS := $(or $(AUTHORS),$(AUTHORS),OpenStaxQA)
 PLATFORM := $(shell uname -s)
