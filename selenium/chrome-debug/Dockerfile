@@ -2,7 +2,7 @@
 # NOTE: DO *NOT* EDIT THIS FILE.  IT IS GENERATED.
 # PLEASE UPDATE Dockerfile.txt INSTEAD OF THIS FILE
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-FROM openstax/selenium-chrome:1.1.0
+FROM openstax/selenium-chrome:3.141.59
 LABEL authors=OpenStaxQA
 
 #==========
@@ -10,7 +10,7 @@ LABEL authors=OpenStaxQA
 #==========
 RUN  sudo mkdir -p /opt/selenium \
   && sudo chown seluser:seluser /opt/selenium \
-  && wget --no-verbose https://selenium-release.storage.googleapis.com/3.13/selenium-server-standalone-3.13.0.jar \
+  && wget --no-verbose https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar \
     -O /opt/selenium/selenium-server-standalone.jar
 
 #==============================
