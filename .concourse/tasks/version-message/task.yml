@@ -6,6 +6,7 @@ image_resource:
     repository: python
     tag: 3.8-slim
 inputs:
+  - name: meta
   - name: chromedriver-latest
   - name: docker-qa-images
 outputs:
