@@ -13,7 +13,7 @@ resource_types:
 resources:
   - name: notify-slack
     type: slack-notification
-    url: ((slack-webhook-qastream)
+    url: ((slack-webhook-qa-stream)
   
   - name: chromedriver-latest
     type: chromedriver-version
