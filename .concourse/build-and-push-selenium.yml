@@ -85,7 +85,7 @@ jobs:
     on_success:
       put: notify-slack
       params:
-        text: ":white_check_mark: all selenium chromedriver images have been updated for the latest version of Chrome"
+        text: ":white_check_mark: all selenium chromedriver images have been updated"
     on_failure:
       put: notify-slack
       params:
