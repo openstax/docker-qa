@@ -19,7 +19,7 @@ def build_concourse_build_url(atc_external_url,
 
 
 message_template = """:female-detective: A new version of chromedriver $version has been detected. 
-Builds have been started in Concourse. Check $build_url for status.
+Check $build_url for status.
 """
 
 template = Template(message_template)
