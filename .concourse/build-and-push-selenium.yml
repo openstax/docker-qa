@@ -1,63 +1,92 @@
 ---
 resource_types:
+  - name: meta
+    type: docker-image
+    source:
+      repository: swce/metadata-resource
+
   - name: slack-notification
     type: docker-image
     source:
       repository: cfcommunity/slack-notification-resource
-  
+
   - name: chromedriver-version
     type: docker-image
+    source:
       repository: openstax/chromedriver-version-resource
       tag: 1.0.0
 
 resources:
+  - name: meta
+    type: meta
+  
   - name: notify-slack
     type: slack-notification
-    url: ((slack-webhook-qa-stream)
+    source:
+      url: ((slack-webhook-qa-stream))
+  
+  - name: selenium-base
+    type: docker-image
+    source:
+      repository: openstax/selenium-base
+      username: ((docker-hub-username))
+      password: ((docker-hub-password))
+
+  - name: selenium-chrome
+    type: docker-image
+    source:
+      repository: openstax/selenium-chrome
+      username: ((docker-hub-username))
+      password: ((docker-hub-password))
+
+  - name: selenium-chrome-debug
+    type: docker-image
+    source:
+      repository: openstax/selenium-chrome-debug
+      username: ((docker-hub-username))
+      password: ((docker-hub-password))
   
   - name: chromedriver-latest
     type: chromedriver-version
 
-  - name: chromedriver-image
-    type: docker-image
-    source:
-      repository: openstax/chromedriver-version-resource
-      username: ((docker-hub-username))
-      password: ((docker-hub-password))
-
-  - name: docker-images-source
+  - name: docker-qa-images
     type: git
     source:
       uri: https://github.com/openstax/docker-qa.git
       branch: master
 
 jobs:
-  - name: build-and-publish-image
+  - name: build-and-publish-images
     plan:
       - get: chromedriver-latest
         trigger: true
-      - get: docker-images-source
-      - put:
-          params:
-            build: docker-images-source/selenium/base
-            tag_file: docker-images-source/selenium/VERSION
-            tag_as_latest: true
-      - put:
-          params:
-            build: docker-images-source/selenium/chrome
-            tag_file: docker-images-source/selenium/VERSION
-            tag_as_latest: true
-      - put:
-          params:
-            build: docker-images-source/selenium/chrome-debug
-            tag_file: docker-images-source/selenium/VERSION
-            tag_as_latest: true
+      - get: meta
+      - get: docker-qa-images
+      - task: create-version-message
+        file: docker-qa-images/.concourse/tasks/version-message/task.yml
+      - put: notify-slack
+        params:
+          text_file: message-output/out.txt
+      - put: selenium-base
+        params:
+          build: docker-qa-images/selenium/base
+          tag_file: docker-qa-images/selenium/VERSION
+          tag_as_latest: true
+      - put: selenium-chrome
+        params:
+          build: docker-qa-images/selenium/chrome
+          tag_file: docker-qa-images/selenium/VERSION
+          tag_as_latest: true
+      - put: selenium-chrome-debug
+        params:
+          build: docker-qa-images/selenium/chrome-debug
+          tag_file: docker-qa-images/selenium/VERSION
+          tag_as_latest: true
     on_success:
-      put: notify
+      put: notify-slack
       params:
         text: ":white_check_mark: all selenium chromedriver images have been updated for the latest version of Chrome"
     on_failure:
-      put: notify
+      put: notify-slack
       params:
         text: ":warning: There was problem building all the selenium chromedriver images"
-
