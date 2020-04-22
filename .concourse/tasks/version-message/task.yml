@@ -1,0 +1,18 @@
+---
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: python
+    tag: 3.8-slim
+inputs:
+  - name: chromedriver-latest
+  - name: docker-qa-images
+outputs:
+  - name: message-output
+run:
+  path: bash
+  args:
+    - -exc
+    - |
+      python docker-qa-images/.concourse/tasks/version-message/script.py | tee message-output/out.txt
