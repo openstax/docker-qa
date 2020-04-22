@@ -10,5 +10,6 @@ Images included:
 
 * selenium/base: Base image which includes Java runtime
 * selenium/chrome: Image which includes the chromedriver
+* selenium/chrome-debug: Image which has a windows manager and allows VNC connections.
 
 [SeleniumReadme]: selenium/README.md
