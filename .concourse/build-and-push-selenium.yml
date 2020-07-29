@@ -67,20 +67,22 @@ jobs:
       - put: notify-slack
         params:
           text_file: message-output/out.txt
+      - task: generate-timestamp-tag
+        file: docker-qa-images/.concourse/tasks/generate-tag/task.yml
       - put: selenium-base
         params:
           build: docker-qa-images/selenium/base
-          tag_file: docker-qa-images/selenium/VERSION
+          tag_file: generated-tag/TAG
           tag_as_latest: true
       - put: selenium-chrome
         params:
           build: docker-qa-images/selenium/chrome
-          tag_file: docker-qa-images/selenium/VERSION
+          tag_file: generated-tag/TAG
           tag_as_latest: true
       - put: selenium-chrome-debug
         params:
           build: docker-qa-images/selenium/chrome-debug
-          tag_file: docker-qa-images/selenium/VERSION
+          tag_file: generated-tag/TAG
           tag_as_latest: true
     on_success:
       put: notify-slack
