@@ -1,0 +1,16 @@
+---
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: python
+    tag: 3.8-slim
+outputs:
+  - name: generated-tag
+run:
+  path: bash
+  args:
+    - -exc
+    - |
+      tag=$(date '+%Y%m%d.%H%M%S')
+      echo "${tag}"> generated-tag/TAG
