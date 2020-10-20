@@ -70,17 +70,17 @@ jobs:
       - put: selenium-base
         params:
           build: docker-qa-images/selenium/base
-          tag_file: docker-qa-images/selenium/VERSION
+          tag_file: chromedriver-latest/version
           tag_as_latest: true
       - put: selenium-chrome
         params:
           build: docker-qa-images/selenium/chrome
-          tag_file: docker-qa-images/selenium/VERSION
+          tag_file: chromedriver-latest/version
           tag_as_latest: true
       - put: selenium-chrome-debug
         params:
           build: docker-qa-images/selenium/chrome-debug
-          tag_file: docker-qa-images/selenium/VERSION
+          tag_file: chromedriver-latest/version
           tag_as_latest: true
     on_success:
       put: notify-slack
