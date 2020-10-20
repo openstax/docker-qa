@@ -2,7 +2,7 @@
 # NOTE: DO *NOT* EDIT THIS FILE.  IT IS GENERATED.
 # PLEASE UPDATE Dockerfile.txt INSTEAD OF THIS FILE
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-FROM openstax/selenium-chrome:86.0.4240.22
+FROM openstax/selenium-chrome:latest
 LABEL authors=OpenStaxQA
 
 #==========
