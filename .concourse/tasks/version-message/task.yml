@@ -5,6 +5,8 @@ image_resource:
   source:
     repository: python
     tag: 3.8-slim
+    username: ((ce-dockerhub-id))
+    password: ((ce-dockerhub-token))
 inputs:
   - name: meta
   - name: chromedriver-latest
