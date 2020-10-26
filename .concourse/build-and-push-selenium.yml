@@ -1,51 +1,55 @@
 ---
+docker-credentials: &docker-credentials
+  username: ((ce-dockerhub-id))
+  password: ((ce-dockerhub-token))
+
 resource_types:
   - name: meta
     type: docker-image
     source:
       repository: swce/metadata-resource
+      <<: *docker-credentials
 
   - name: slack-notification
     type: docker-image
     source:
       repository: cfcommunity/slack-notification-resource
+      <<: *docker-credentials
 
   - name: chromedriver-version
     type: docker-image
     source:
       repository: openstax/chromedriver-version-resource
       tag: 1.0.0
+      <<: *docker-credentials
 
 resources:
   - name: meta
     type: meta
-  
+
   - name: notify-slack
     type: slack-notification
     source:
       url: ((slack-webhook-qa-stream))
-  
+
   - name: selenium-base
     type: docker-image
     source:
       repository: openstax/selenium-base
-      username: ((docker-hub-username))
-      password: ((docker-hub-password))
+      <<: *docker-credentials
 
   - name: selenium-chrome
     type: docker-image
     source:
       repository: openstax/selenium-chrome
-      username: ((docker-hub-username))
-      password: ((docker-hub-password))
+      <<: *docker-credentials
 
   - name: selenium-chrome-debug
     type: docker-image
     source:
       repository: openstax/selenium-chrome-debug
-      username: ((docker-hub-username))
-      password: ((docker-hub-password))
-  
+      <<: *docker-credentials
+
   - name: chromedriver-latest
     type: chromedriver-version
 
