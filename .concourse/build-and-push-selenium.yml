@@ -10,12 +10,6 @@ resource_types:
       repository: swce/metadata-resource
       <<: *docker-credentials
 
-  - name: slack-notification
-    type: docker-image
-    source:
-      repository: cfcommunity/slack-notification-resource
-      <<: *docker-credentials
-
   - name: chromedriver-version
     type: docker-image
     source:
@@ -26,11 +20,6 @@ resource_types:
 resources:
   - name: meta
     type: meta
-
-  - name: notify-slack
-    type: slack-notification
-    source:
-      url: ((slack-webhook-qa-stream))
 
   - name: selenium-base
     type: docker-image
@@ -68,9 +57,25 @@ jobs:
       - get: docker-qa-images
       - task: create-version-message
         file: docker-qa-images/.concourse/tasks/version-message/task.yml
-      - put: notify-slack
-        params:
-          text_file: message-output/out.txt
+      - task: notify slack
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: curlimages/curl
+              <<: *docker-credentials
+          inputs:
+          - name: message-output
+          params:
+            WEBHOOK_URL: ((slack-webhook-qa-stream))
+          run:
+            path: /bin/sh
+            args:
+            - -cxe
+            - |-
+              message=$(cat message-output/out.txt)
+              curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"${message}\"}" "$WEBHOOK_URL"
       - task: generate-timestamp-tag
         file: docker-qa-images/.concourse/tasks/generate-tag/task.yml
       - put: selenium-base
@@ -89,10 +94,38 @@ jobs:
           tag_file: generated-tag/TAG
           tag_as_latest: true
     on_success:
-      put: notify-slack
-      params:
-        text: ":white_check_mark: all selenium chromedriver images have been updated"
+      task: notify slack
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: curlimages/curl
+            <<: *docker-credentials
+        params:
+          WEBHOOK_URL: ((slack-webhook-qa-stream))
+        run:
+          path: /bin/sh
+          args:
+          - -cxe
+          - |-
+            message=":white_check_mark: all selenium chromedriver images have been updated"
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"${message}\"}" "$WEBHOOK_URL"
     on_failure:
-      put: notify-slack
-      params:
-        text: ":warning: There was problem building all the selenium chromedriver images"
+      task: notify slack
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: curlimages/curl
+            <<: *docker-credentials
+        params:
+          WEBHOOK_URL: ((slack-webhook-qa-stream))
+        run:
+          path: /bin/sh
+          args:
+          - -cxe
+          - |-
+            message=":warning: There was problem building all the selenium chromedriver images"
+            curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"${message}\"}" "$WEBHOOK_URL"
