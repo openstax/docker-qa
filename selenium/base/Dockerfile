@@ -1,6 +1,6 @@
 # This file is based on https://github.com/SeleniumHQ/docker-selenium/blob/master/Base/Dockerfile
 # The big difference is we don't use ubuntu and do not install selenium-server
-FROM python:3.8-buster
+FROM python:3.7.0-stretch
 LABEL authors="OpenStaxQA <qa@openstax.org>"
 
 # No interactive frontend during docker build
