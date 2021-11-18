@@ -14,7 +14,7 @@ resource_types:
     type: docker-image
     source:
       repository: openstax/chromedriver-version-resource
-      tag: 1.0.0
+      tag: 1.0.1
       <<: *docker-credentials
 
 resources:
@@ -48,10 +48,20 @@ resources:
       uri: https://github.com/openstax/docker-qa.git
       branch: master
 
+  - name: selenium-base-dockerfile
+    type: git
+    source:
+      uri: https://github.com/openstax/docker-qa.git
+      branch: master
+      paths:
+        - selenium/base/Dockerfile
+
 jobs:
   - name: build-and-publish-images
     plan:
       - get: chromedriver-latest
+        trigger: true
+      - get: selenium-base-dockerfile
         trigger: true
       - get: meta
       - get: docker-qa-images
