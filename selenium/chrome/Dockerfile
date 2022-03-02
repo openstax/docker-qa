@@ -16,13 +16,11 @@ LABEL authors=OpenStaxQA
 #       google-chrome-beta  (pull latest beta)
 #============================================
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
-ARG CHROME_VERSION="google-chrome-stable"
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-  && apt-get update -qqy \
-  && apt-get -qqy install \
-    ${CHROME_VERSION:-google-chrome-stable} \
-  && rm /etc/apt/sources.list.d/google-chrome.list \
+ARG CHROME_VERSION="88.0.4324.96-1"
+RUN wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb \
+  && apt-get update \
+  && apt install -y /tmp/chrome.deb \
+  && rm /tmp/chrome.deb \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 #=================================
