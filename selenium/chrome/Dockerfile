@@ -37,7 +37,7 @@ USER seluser
 # can specify versions by CHROME_DRIVER_VERSION
 # Latest released version will be used by default
 #============================================
-ARG CHROME_DRIVER_VERSION="latest"
+ARG CHROME_DRIVER_VERSION="88.0.4324.96"
 
 RUN  sudo mkdir -p /opt/selenium \
   && sudo chown seluser:seluser /opt/selenium
